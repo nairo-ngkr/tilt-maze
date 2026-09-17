@@ -56,19 +56,26 @@
 //
 //      let ball = { x: 150, y: 200, vx: 0, vy: 0 };
 
-let ball = { x: 150, y: 200, vx: 0, vy: 0 };
+let ball = { x: 20, y: 20, vx: 0, vy: 0 };
 
 //ゴールの状態とクリア状態を定義する
 let goal = { x:45, y:330, r:22 };
 let cleared = false;
 
-//開始時刻
-let startTime = Date.now();
+// 最初はゲームが動かないようにし、開始時間の変数を定義
+let isPlaying = false;
+let startTime = 0;
 
 //壁
 let walls = [
     { x: -20, y:120, w:230, h:16 },
     { x: 90, y:250, w:230, h:16 },
+    { x: 40, y:190, w:16, h:90 },
+    { x: 100, y:120, w:16, h:100 },
+    { x: 40, y:10, w:16, h:60 },//最初の壁
+    //{ x: 200, y:10, w:16, h:60 },
+    { x: 150, y:70, w:16, h:60 },
+    { x: 200, y:50, w:100, h:8 },
 ];
 
 function hitWall() {
@@ -81,6 +88,27 @@ function hitWall() {
   }
   return false;
 }
+
+//ボタンを押してゲームを開始
+document.getElementById("startBtn").addEventListener("click", function() {
+    if(isPlaying == false && cleared == false) {
+        isPlaying = true;
+        startTime = Date.now();
+    document.getElementById("startBtn").style.display = "none";//スタートしたら非表示
+    }else if (cleared == true) {
+        //リトライ時の処理
+        isPlaying = true;
+        cleared = false;
+        startTime = Date.now();
+        ball.x = 150;
+        ball.y = 200;
+        ball.vx = 0;
+        ball.vy = 0;
+        
+        document.getElementById("message").textContent = "";
+        document.getElementById("startBtn").style.display = "none";
+}
+});
 
 // ------------------------------------------------------------
 //  STEP 2   描画する
@@ -95,6 +123,8 @@ function hitWall() {
 //  確認: 画面中央に玉が表示される。まだ動かない。
 
 function update() {
+    if (isPlaying == true && cleared == false){
+
     ball.vx = ball.vx + tilt.x * 0.5;
     ball.vy = ball.vy + tilt.y * 0.5;
 
@@ -124,9 +154,15 @@ function update() {
     if (ball.vx > 100) {
         ball.vx = 100;
     }
+    if (ball.vx < -100) {
+            ball.vx = -100;
+        }
     if (ball.vy > 100) {
         ball.vy = 100;
     }
+    if (ball.vy < -100) {
+            ball.vy = -100;
+        }
 
     if (ball.x < 20) {
         ball.x = 20;
@@ -148,12 +184,33 @@ function update() {
         ball.y = BOARD_H -20;
         ball.vy = -ball.vy * 0.5;
     }
+}else {
+    ball.vx = 0;
+    ball.vy = 0;
+}
 
     //ゴール判定
     let dx = ball.x - goal.x;
     let dy = ball.y - goal.y;
     let dist = Math.sqrt(dx * dx + dy * dy);
 
+    if (dist < goal.r && cleared == false) {
+        cleared = true;
+
+        //RETRYに変化
+        let btn = document.getElementById("startBtn");
+        btn.style.display = "inline-block";
+        btn.textContent = "RETRY";
+    }
+
+    if (isPlaying === true && cleared == false) {
+        let elapsed = (Date.now() - startTime) / 1000;
+        document.getElementById("timer").textContent = elapsed.toFixed(1);
+    } else if (cleared === true) {
+        document.getElementById("message").textContent = "CLEAR!!";
+    }
+
+    /*
     if (dist < goal.r) {
         cleared = true;
     }
@@ -164,6 +221,7 @@ function update() {
     } else {
         document.getElementById("message").textContent = "CLEAR!!";
     }
+    */
 
     //壁の描画
     for (let i = 0; i <walls.length; i++){
@@ -171,7 +229,7 @@ function update() {
     }
 
     drawBall(ball.x, ball.y);
-    drawWall(walls[0].x, walls[0].y, walls[0].w, walls[0].h);
+    //drawWall(walls[0].x, walls[0].y, walls[0].w, walls[0].h);
     drawGoal(goal.x, goal.y, goal.r);
 }
 
