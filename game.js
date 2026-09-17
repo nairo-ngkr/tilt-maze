@@ -56,9 +56,14 @@
 //
 //      let ball = { x: 150, y: 200, vx: 0, vy: 0 };
 
+let ball = { x: 150, y: 200, vx: 0, vy: 0 };
 
+//ゴールの状態とクリア状態を定義する
+let goal = { x:45, y:330, r:22 };
+let cleared = false;
 
-
+//開始時刻
+let startTime = Date.now();
 
 // ------------------------------------------------------------
 //  STEP 2   描画する
@@ -72,8 +77,65 @@
 //
 //  確認: 画面中央に玉が表示される。まだ動かない。
 
+function update() {
+    ball.vx = ball.vx + tilt.x * 0.5;
+    ball.vy = ball.vy + tilt.y * 0.5;
 
+    //step8 摩擦
+    ball.vx = ball.vx * 0.98;
+    ball.vy = ball.vy * 0.98;
 
+    //step3
+    ball.x = ball.x + ball.vx;
+    ball.y = ball.y + ball.vy;
+
+    //速度制限
+    if (ball.vx > 100) {
+        ball.vx = 100;
+    }
+    if (ball.vy > 100) {
+        ball.vy = 100;
+    }
+
+    if (ball.x < 20) {
+        ball.x = 20;
+        ball.vx = -ball.vx * 0.5;
+    }
+    
+    //step6 右側の壁
+    if (ball.x > BOARD_W -20) {
+        ball.x = BOARD_W -20;
+        ball.vx = -ball.vx * 0.5;
+    }
+
+    //step7 上下の壁
+    if (ball.y < 20) {
+        ball.y = 20;
+        ball.vy = -ball.vy * 0.5;
+    }
+    if (ball.y > BOARD_H -20) {
+        ball.y = BOARD_H -20;
+        ball.vy = -ball.vy * 0.5;
+    }
+
+    //ゴール判定
+    let dx = ball.x - goal.x;
+    let dy = ball.y - goal.y;
+    let dist = Math.sqrt(dx * dx + dy * dy);
+
+    if (dist < goal.r) {
+        cleared = true;
+    }
+
+    if (cleared === false) {
+        let elapsed = (Date.now() - startTime) / 1000;
+        document.getElementById("timer").textContent = elapsed.toFixed(1);
+    } else {
+        document.getElementById("message").textContent = "CLEAR!!";
+    }
+
+    drawBall(ball.x, ball.y);
+}
 
 
 // ------------------------------------------------------------

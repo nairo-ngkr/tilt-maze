@@ -38,8 +38,8 @@
 
 body {
           background: #1a1a1a;
-          color: #f0f0f0;
-          font-family: sans-serif;
+          color: #bbc4da;
+          font-family: Arial, sans-serif;
           text-align: center;
         }
 
@@ -92,7 +92,7 @@ body {
     height: 20px;
     background: #FFFFFF;
     border-radius: 50%;
-    
+
 }
 
 
