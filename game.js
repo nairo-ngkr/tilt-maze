@@ -100,8 +100,8 @@ document.getElementById("startBtn").addEventListener("click", function() {
         isPlaying = true;
         cleared = false;
         startTime = Date.now();
-        ball.x = 150;
-        ball.y = 200;
+        ball.x = 20;
+        ball.y = 20;
         ball.vx = 0;
         ball.vy = 0;
         
