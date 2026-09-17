@@ -37,10 +37,12 @@
    ------------------------------------------------------------ */
 
 body {
-          background: #1a1a1a;
-          color: #bbc4da;
-          font-family: Arial, sans-serif;
+          background: #fdf6f5;
+          color: #7a6b73;
+          font-family: 'Comic Sans MS', 'Rounded M+ 1c', 'Hiragino Maru Gothic ProN', sans-serif;
           text-align: center;
+          margin: 0;
+          padding-top: 20px;
         }
 
 
@@ -65,9 +67,12 @@ body {
 #board{
     width: 300px;
     height: 400px;
-    background: #debbbb;
-    border: 2px solid #666;
-    margin: 20px auto;
+    margin: 10px auto 20px;
+    background: #fff;
+    border: 6px solid #a4ccdd;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 8px 20px rgba(250, 227, 217, 0.6);
 }
 
 
@@ -125,11 +130,17 @@ body {
     font-weight: bold;
     color: #853232;
     padding: 10px 24px;
-    border-radius: 6px;
+    border-radius: 30px;
     border: none;
     cursor: pointer;
-    opacity: 0.6;
+    box-shadow: 0 6px 0 #95c0b3;
+    transition: all 0.1s; /*へこむ*/
     background: #e0e4c5;
+    letter-spacing: 1px;
+}
+#startBtn:active {
+    transform: translateY(6px);
+    box-shadow: none;
 }
 
 .note{
