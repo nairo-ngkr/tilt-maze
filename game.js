@@ -65,6 +65,23 @@ let cleared = false;
 //開始時刻
 let startTime = Date.now();
 
+//壁
+let walls = [
+    { x: -20, y:120, w:230, h:16 },
+    { x: 90, y:250, w:230, h:16 },
+];
+
+function hitWall() {
+  for (let i = 0; i < walls.length; i++) {
+    let w = walls[i];
+    if (ball.x > w.x && ball.x < w.x + w.w &&
+        ball.y > w.y && ball.y < w.y + w.h) {
+      return true;
+    }
+  }
+  return false;
+}
+
 // ------------------------------------------------------------
 //  STEP 2   描画する
 // ------------------------------------------------------------
@@ -86,8 +103,22 @@ function update() {
     ball.vy = ball.vy * 0.98;
 
     //step3
+    //ball.x = ball.x + ball.vx;
+    //ball.y = ball.y + ball.vy;
+
+    //衝突
+    let prevX = ball.x;
     ball.x = ball.x + ball.vx;
+    if (hitWall()) {
+      ball.x = prevX;
+      ball.vx = -ball.vx * 0.5;
+    }
+    let prevY = ball.y;
     ball.y = ball.y + ball.vy;
+    if (hitWall()) {
+      ball.y = prevY;
+      ball.vy = -ball.vy * 0.5;
+    }
 
     //速度制限
     if (ball.vx > 100) {
@@ -134,7 +165,14 @@ function update() {
         document.getElementById("message").textContent = "CLEAR!!";
     }
 
+    //壁の描画
+    for (let i = 0; i <walls.length; i++){
+        drawWall(walls[i].x, walls[i].y, walls[i].w, walls[i].h);
+    }
+
     drawBall(ball.x, ball.y);
+    drawWall(walls[0].x, walls[0].y, walls[0].w, walls[0].h);
+    drawGoal(goal.x, goal.y, goal.r);
 }
 
 

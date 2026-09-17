@@ -137,6 +137,15 @@ body {
     opacity: 0.6;
 }
 
+#message{
+    color: #ff6b6b;
+    font-size: 32px;
+    font-weight: bold;
+    text-align: center;
+    height: 40px;
+    margin: 10px 0;
+}
+
 
 /* ============================================================
     完成したら公開する。
