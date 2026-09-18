@@ -37,14 +37,27 @@
    ------------------------------------------------------------ */
 
 body {
-          background: #fdf6f5;
+          background: linear-gradient(160deg, #ffe9f0 0%, #fdf6f5 35%, #eaf3ff 100%);
+          background-attachment: fixed;
           color: #7a6b73;
           font-family: 'Comic Sans MS', 'Rounded M+ 1c', 'Hiragino Maru Gothic ProN', sans-serif;
           text-align: center;
           margin: 0;
           padding-top: 20px;
+          overflow-x: hidden;
         }
 
+#best {
+          font-size: 14px;
+          opacity: 0.65;
+          margin: 0 0 4px;
+        }
+#best.new-record {
+          color: #ff8fb1;
+          font-weight: bold;
+          opacity: 1;
+          animation: pop 0.4s ease;
+        }
 
 /* ------------------------------------------------------------
     STEP 7   盤
@@ -73,6 +86,7 @@ body {
     border-radius: 16px;
     overflow: hidden;
     box-shadow: 0 8px 20px rgba(250, 227, 217, 0.6);
+    position: relative;
 }
 
 
@@ -142,10 +156,24 @@ body {
     transform: translateY(6px);
     box-shadow: none;
 }
+#startBtn:hover {
+    background: #d9e0b8;
+    animation: wiggle 0.4s ease;
+}
+@keyframes wiggle {
+    0%, 100% { transform: rotate(0); }
+    25% { transform: rotate(-3deg); }
+    75% { transform: rotate(3deg); }
+}
 
 .note{
     font-size: 16px;
     opacity: 0.6;
+}
+
+@keyframes pop {
+    0% { transform: scale(0.8); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
 }
 
 #message{
@@ -155,6 +183,23 @@ body {
     text-align: center;
     height: 40px;
     margin: 10px 0;
+    animation: pop 0.3s ease;
+}
+
+/* 紙吹雪 */
+.confetti{
+    position: fixed;
+    top: -20px;
+    font-size: 20px;
+    pointer-events: none;
+    z-index: 9999;
+    animation-name: fall;
+    animation-timing-function: linear;
+    animation-fill-mode: forwards;
+}
+@keyframes fall {
+    0%   { transform: translateY(0) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(110vh) rotate(540deg); opacity: 0.9; }
 }
 
 

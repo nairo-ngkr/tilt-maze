@@ -66,6 +66,40 @@ let cleared = false;
 let isPlaying = false;
 let startTime = 0;
 
+//演出
+const bestEl = document.getElementById("best");
+
+//ベストタイムをブラウザに保存し、次に遊んだときも表示
+let bestTime = Number(localStorage.getItem("tiltMazeBestTime")) || null;
+if (bestTime) {
+    bestEl.textContent = "Best Time: " + bestTime.toFixed(1) + "秒";
+}
+
+// 紙吹雪を1枚降らせる
+function spawnConfettiPiece() {
+    const piece = document.createElement("div");
+    piece.className = "confetti";
+    piece.textContent = ["🎉", "⭐", "🎊", "💖", "✨"][Math.floor(Math.random() * 5)];
+    piece.style.left = Math.random() * 100 + "vw";
+    piece.style.animationDuration = (1.5 + Math.random() * 1.5) + "s";
+    document.body.appendChild(piece);
+    piece.addEventListener("animationend", function () { piece.remove(); });
+}
+
+function celebrate(elapsed) {
+    for (let i = 0; i < 30; i++) {
+        setTimeout(spawnConfettiPiece, i * 40);
+    }
+    if (bestTime === null || elapsed < bestTime) {
+        bestTime = elapsed;
+        localStorage.setItem("tiltMazeBestTime", String(bestTime));
+        bestEl.textContent = "ベスト: " + bestTime.toFixed(1) + "秒（更新！）";
+        bestEl.classList.add("new-record");
+    } else {
+        bestEl.textContent = "ベスト: " + bestTime.toFixed(1) + "秒";
+    }
+}
+
 //壁
 let walls = [
     { x: -20, y:120, w:230, h:16 },
@@ -201,6 +235,9 @@ function update() {
         let btn = document.getElementById("startBtn");
         btn.style.display = "inline-block";
         btn.textContent = "RETRY";
+
+        //お祝い演出（紙吹雪＋ベストタイム更新）
+        celebrate((Date.now() - startTime) / 1000);
     }
 
     if (isPlaying === true && cleared == false) {
